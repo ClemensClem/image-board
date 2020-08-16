@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Roots To Sky</title>
+        <link rel="stylesheet" href="/style.css" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap"
+            rel="stylesheet"
+        />
+    </head>
+    <body>
+        <div class="main">
+            <!--Header-->
+            <header>
+                <div class="logo">
+                    <img src="/resources/media/photo-camera.png" alt="Logo" />
+                    <p>Roots To Sky || Bamboo Architecture</p>
+                </div>
+                <form class="upload">
+                    <input
+                        type="text"
+                        name="title"
+                        id="title"
+                        value=""
+                        placeholder="Title"
+                        v-model="formDataObj.title"
+                        required
+                    />
+                    <input
+                        type="text"
+                        name="description"
+                        id="description"
+                        value=""
+                        placeholder="Description"
+                        v-model="formDataObj.description"
+                        required
+                    />
+                    <input
+                        type="text"
+                        name="username"
+                        id="username"
+                        value=""
+                        placeholder="Username"
+                        v-model="formDataObj.username"
+                        required
+                    />
+                    <input
+                        id="uploadFileButton"
+                        type="file"
+                        name="fileUpload"
+                        accept="image/*"
+                        @change="uploadFormData"
+                        placeholder="Add Photo"
+                        required
+                    />
+                    <button
+                        class="uploadButton"
+                        name="upload"
+                        value="upload"
+                        @click="sendFormData"
+                    >
+                        Upload
+                    </button>
+                </form>
+            </header>
+            <!--Main Section-->
+
+            <!--Script for modal-->
+            <!--":id" is a shortform of "v-bind"
+            "closeModal" is the method in Vue main" -->
+            <modal
+                v-if="selectedImageId"
+                :modal-image-id="selectedImageId"
+                @close="closeModal"
+            ></modal>
+
+            <!--Image section-->
+            <div class="images">
+                <figure class="images-brick" v-for="image in images">
+                    <a v-bind:href="'#' + image.id">
+                        <img
+                            v-bind:src="image.url"
+                            v-bind:alt="image.description"
+                        />
+                    </a>
+                    <div class="caption">
+                        <figcaption>{{image.title}}</figcaption>
+                    </div>
+                </figure>
+            </div>
+
+            <!--Footer-->
+            <footer>
+                <p>
+                    by Clemens
+                </p>
+            </footer>
+        </div>
+
+        <!--Script for modal-->
+        <script type="text/x-template" id="modalTemplate">
+            <div class="modal">
+                <div class="contentWrapper">
+                    <div class="modalHeader">
+                        <p class="closeModal" @click="closeModal"><strong>X</strong></p>
+                    </div>
+                    <div class="modalImageBox">
+                        <div class="modalImageBoxImage">
+                            <img v-bind:src="imageInModal.url" v-bind:alt="imageInModal.title">
+                        </div>
+                        <div class="modalImageBoxDescription">
+                            <h2>"{{imageInModal.title}}"</h2>
+                            <p>Uploaded {{imageInModal.created_at}} by user <strong>{{imageInModal.username}}</strong></p>
+                            <p><strong>The Story behind:</strong></br>"{{imageInModal.description}}"</p>
+                        </div>
+                    </div>
+                    <div class="modalComments">
+                        <div class="leaveComment">
+                            <textarea name="commentField" id="commentField" cols="10" rows="5" placeholder="Leave a comment here" v-model="makeComment.comment"></textarea>
+                            <input type="text" name="usernameComment" id="usernameComment" value="" placeholder="Username" v-model="makeComment.username" required/>
+                            <button class="submitComment" name="submitComment" value="submitComment" @click="sendCommentData"> Submit </button>
+                        </div>
+                        <div class="userComments" v-if="commentData.length > 0">
+                            <div class="comments" v-for="comment in commentData">
+                                <p>"{{comment.comment}}"</p>
+                                <p>by User {{comment.user}} on date {{comment.created_at}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </script>
+
+        <!--Scripts-->
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <!-- Locally stored script files: 
+        <script src="js/axios.min.js"></script>
+        <script src="js/vue.js"></script>-->
+        <script src="js/script.js"></script>
+        <!--/////End script for modal/////-->
+    </body>
+</html>
